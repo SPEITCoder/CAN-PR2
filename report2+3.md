@@ -1,7 +1,7 @@
 # 2 Warm Up
 ## 2.1 MIPS Tools
 + Compile insertion-sort.c
-
+```
 bin/insertion-sort.elf: src/insertion-sort.c
 	$(MIPS_CC) $(MIPS_CFLAGS) -o $@ $<
 
@@ -10,9 +10,9 @@ bin/insertion-sort.bin: bin/insertion-sort.elf
 
 cfg/*.cfg: bin/insertion-sort.elf
     bin/updatecfgFiles.sh $< ./cfg > /dev/null 2>&1
-
+```
 +  -nostdlib and -nostartfiles
-
+```
 -nostdlib
           Do not use the standard system startup files or libraries when linking.  No startup files and only the
           libraries you specify will be passed to the linker, options specifying linkage of the system libraries,
@@ -44,9 +44,9 @@ cfg/*.cfg: bin/insertion-sort.elf
           when you specify -nostdlib or -nodefaultlibs you should usually specify -lgcc as well.  This ensures
           that you have no unresolved references to internal GCC library subroutines.  (For example, __main, used
           to ensure C++ constructors will be called.)
-
+```
 + look at the assembly code
-
+```
 sjtu@sjtu-OptiPlex-3010:~/Documents/DossierNicolasien/PR2$ mips-linux-gnu-objdump -d bin/insertion-sort.elf 
 
 bin/insertion-sort.elf:     file format elf32-tradlittlemips
@@ -191,9 +191,9 @@ Disassembly of section .text:
    1204:       03e00008        jr      ra
    1208:       00000000        nop
    120c:       00000000        nop
-
+```
 + look at the code + .c
-
+```
 sjtu@sjtu-OptiPlex-3010:~/Documents/DossierNicolasien/PR2$ mips-linux-gnu-objdump -S bin/insertion-sort.elf 
 
 bin/insertion-sort.elf:     file format elf32-tradlittlemips
@@ -272,7 +272,7 @@ int main()
 {
    1098:       27bdffb0        addiu   sp,sp,-80 // r29, r29, -80 ?
    109c:       afbf004c        sw      ra,76(sp) // 76(r29), r31
-   10a0:       afbe0048        sw      s8,72(sp) // 72r(r29), r31
+   10a0:       afbe0048        sw      s8,72(sp) // 72(r29), r31
    10a4:       03a0f025        move    s8,sp // or r30, r29, r0
        int buf[SIZE];
        int i;
@@ -409,9 +409,9 @@ void __start()
    1204:       03e00008        jr      ra
    1208:       00000000        nop
    120c:       00000000        nop
-
+```
 + Symbols in 
-
+```
 sjtu@sjtu-OptiPlex-3010:~/Documents/DossierNicolasien/PR2$ mips-linux-gnu-objdump -t -j.data -j.text bin/insertion-sort.elf
 
 bin/insertion-sort.elf:     file format elf32-tradlittlemips
@@ -429,15 +429,16 @@ SYMBOL TABLE:
 000113a0 g       .data  00000000 _end
 00001000 g     F .text  00000098 minIndex
 000113a0 g       .data  00000000 _fbss
-
->> Symbol for INPUT in C code :
+```
+Symbol for INPUT in C code :
+```
 00011210 l    d  .data  00000000 .data
 00011210 g       .data  00000000 _fdata
 00011210 g     O .data  00000190 input
-
+```
 + Loading address of input into register.
 
->> 
+```
 for(i = 0; i < SIZE; i++)
    10e0:       8fc20018        lw      v0,24(s8)
    10e4:       24420001        addiu   v0,v0,1
@@ -449,6 +450,7 @@ for(i = 0; i < SIZE; i++)
        {
                buf[i] = input[i];
        }
+```
 
 ## 2.2 openDLX
 
@@ -526,4 +528,39 @@ Total forwarded values: 1191 (from execute: 1146, memory stage: 45, write back: 
 ```
 
 # 3 Pipelining
-10cc, for 30 cyles
+
++ The CPU supports forwarding. 
+
+e.g. Cycle 3, instruction 0x11d8: sw 28(r29), r31 is in EX stage, where r29 isn't yet written back (in MEM stage).
+
+![Cycles and pipeline](img/3forwarding.png)
+
+![Logs](img/3forwarding1.png)
+
+In addtion, it is explicitly shown from the log that a forwarding is done to fetch the computed r29 value for sw instruction.
++ Special case for <code>lw</code>
+
+When 0x11ec <code>lw</code> is in EX and MEM stages, <code>slti</code> needs r2 value to enter EX stage, thus this dependency caused a data hazard, solved by a stalling of penalty 1.
+![Stall](img/3stall.png)
+
++ Stages striked out
+
+![Flush](img/3flush.png)
+
+0x11f0 is actually a misprediction produced at 0x11e8, (it is not actually a prediction since the instuction 0x11e8 is an unconditonal jump).
+Thus when 0x11e8 enters EX stage and the CPU spots out that 0x11f0 should not be executed at all, thus it is flushed and the correct instruction is fetched from 0x1098.
+
+Another example could be find here: 
+![Flush 2](img/3flusheg2.png)
+
+and here:
+
+![Flush 3](img/3flusheg3.png)
+
+The latter two was produced by misprediction of conditional branches.
+
++ Difference of the methodology of handling jumps and branches
+
+1. The lecture introduced a processor with dedicated branch prediction, selection and address calculation circuit, while the mocked processor integrates theses tasks into ALU.
+2. Our binary file have always at least one nop following a (conditional or unconditional) jump, thus we only have to flush one instruction in the case of one misprediction rather than two instructions.
+
