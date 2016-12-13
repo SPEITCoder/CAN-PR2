@@ -466,4 +466,64 @@ rt = 2, rs = 30, imm = 24
 
 11e8:       0c000426        jal     1098 <main>
 
-an unconditional branch 
+an unconditional branch jump
+
++ Statistics
+```
+-------- SIMULATION STATISTICS --------
+Cycles: 9
+Executed instructions: 6
+Performed fetches: 9
+Cache statistics:
+Icache: used rpol: DIRECT_MAPPED lines: 32 associativity: 1 line_size: 8 total size: 256
+Accesses:9 hits: 3 misses: 6 hit rate: 33,33% loaded words: 12
+Dcache: used rpol: DIRECT_MAPPED wpol: WRITE_THROUGH lines: 4 associativity: 1 line_size: 4 total size: 16
+Accesses: 0 hits: 0 misses: 0 loaded words: 0
+Jumps: 1 (taken: 1, not taken: 0) branches_likely: 0 branches_and_link: 1
+Branch Target Buffer (128, D_1BIT): hits: 0 misses: 1
+Jumps correctly predicted: 0 mispredicted: 1 misprediction rate: 100%
+Number of unique jumps: 1
+bpc: 0x000011e8 [104] tgts: [0x00001098] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
+Memory accesses: 2 (reads: 0, writes: 2)
+ALU forwarded values: 3 (from execute: 3, memory stage: 0, write back: 0)
+BCRTL forwarded values: 0 (from execute: 0, memory stage: 0, write back: 0)
+STORE forwarded values: 0 (from execute: 0, memory stage: 0, write back: 0)
+Total forwarded values: 3 (from execute: 3, memory stage: 0, write back: 0)
+-------- SIMULATION STATISTICS --------
+```
+
++ After the execution
+```
+-------- SIMULATION STATISTICS --------
+Cycles: 1868
+Executed instructions: 1441
+Performed fetches: 1868
+Cache statistics:
+Icache: used rpol: DIRECT_MAPPED lines: 32 associativity: 1 line_size: 8 total size: 256
+Accesses:1868 hits: 1558 misses: 310 hit rate: 83,4% loaded words: 620
+Dcache: used rpol: DIRECT_MAPPED wpol: WRITE_THROUGH lines: 4 associativity: 1 line_size: 4 total size: 16
+Accesses: 500 hits: 220 misses: 280 hit rate: 44% loaded words: 280
+Jumps: 125 (taken: 110, not taken: 15) branches_likely: 0 branches_and_link: 9
+Branch Target Buffer (128, D_1BIT): hits: 115 misses: 10
+Jumps correctly predicted: 88 mispredicted: 37 misprediction rate: 29,6%
+Number of unique jumps: 10
+bpc: 0x00001078 [120] tgts: [0x00001024] a:44 t/nt: 36/8 mp/cp: 16/28 mp-ratio: 0,36
+bpc: 0x00001050 [80] tgts: [0x00001060] a:36 t/nt: 31/5 mp/cp: 11/25 mp-ratio: 0,31
+bpc: 0x000010f4 [116] tgts: [0x000010b4] a:9 t/nt: 8/1 mp/cp: 2/7 mp-ratio: 0,22
+bpc: 0x000011ac [44] tgts: [0x00001108] a:9 t/nt: 8/1 mp/cp: 2/7 mp-ratio: 0,22
+bpc: 0x0000101c [28] tgts: [0x0000106c] a:8 t/nt: 8/0 mp/cp: 1/7 mp-ratio: 0,12
+bpc: 0x00001090 [16] tgts: [0x00001130] a:8 t/nt: 8/0 mp/cp: 1/7 mp-ratio: 0,12
+bpc: 0x00001128 [40] tgts: [0x00001000] a:8 t/nt: 8/0 mp/cp: 1/7 mp-ratio: 0,12
+bpc: 0x000010ac [44] tgts: [0x000010ec] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
+bpc: 0x00001100 [0] tgts: [0x000011a4] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
+bpc: 0x000011e8 [104] tgts: [0x00001098] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
+Memory accesses: 643 (reads: 500, writes: 143)
+ALU forwarded values: 994 (from execute: 957, memory stage: 37, write back: 0)
+BCRTL forwarded values: 95 (from execute: 88, memory stage: 7, write back: 0)
+STORE forwarded values: 102 (from execute: 101, memory stage: 1, write back: 0)
+Total forwarded values: 1191 (from execute: 1146, memory stage: 45, write back: 0)
+-------- SIMULATION STATISTICS --------
+```
+
+# 3 Pipelining
+10cc, for 30 cyles
