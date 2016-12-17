@@ -62,10 +62,8 @@ Disassembly of section .text:
    1010:       afc5001c        sw      a1,28(s8)
    1014:       afc0000c        sw      zero,12(s8)
    1018:       afc00008        sw      zero,8(s8)
-i < n
    101c:       10000013        b       106c <minIndex+0x6c>
    1020:       00000000        nop
-for(i = 0; i < n; i++){
    1024:       8fc20008        lw      v0,8(s8)
    1028:       00021080        sll     v0,v0,0x2
    102c:       8fc30018        lw      v1,24(s8)
@@ -77,12 +75,10 @@ for(i = 0; i < n; i++){
    1044:       00821021        addu    v0,a0,v0
    1048:       8c420000        lw      v0,0(v0)
    104c:       0062102a        slt     v0,v1,v0
-if (array[i] < array[minIdx]){
    1050:       10400003        beqz    v0,1060 <minIndex+0x60>
    1054:       00000000        nop
    1058:       8fc20008        lw      v0,8(s8)
    105c:       afc2000c        sw      v0,12(s8)
-}
    1060:       8fc20008        lw      v0,8(s8)
    1064:       24420001        addiu   v0,v0,1
    1068:       afc20008        sw      v0,8(s8)
@@ -90,13 +86,11 @@ if (array[i] < array[minIdx]){
    1070:       8fc2001c        lw      v0,28(s8)
    1074:       0062102a        slt     v0,v1,v0
    1078:       1440ffea        bnez    v0,1024 <minIndex+0x24>
-}   
    107c:       00000000        nop
    1080:       8fc2000c        lw      v0,12(s8)
    1084:       03c0e825        move    sp,s8
    1088:       8fbe0014        lw      s8,20(sp)
    108c:       27bd0018        addiu   sp,sp,24
-return
    1090:       03e00008        jr      ra
    1094:       00000000        nop
 
@@ -106,10 +100,8 @@ return
    10a0:       afbe0048        sw      s8,72(sp)
    10a4:       03a0f025        move    s8,sp
    10a8:       afc00018        sw      zero,24(s8)
-i < SIZE
    10ac:       1000000f        b       10ec <main+0x54>
    10b0:       00000000        nop
-for(i = 0; i < SIZE; i++){
    10b4:       3c020001        lui     v0,0x1
    10b8:       8fc30018        lw      v1,24(s8)
    10bc:       00031880        sll     v1,v1,0x2
@@ -126,14 +118,11 @@ for(i = 0; i < SIZE; i++){
    10e8:       afc20018        sw      v0,24(s8)
    10ec:       8fc20018        lw      v0,24(s8)
    10f0:       28420008        slti    v0,v0,8
-   10f4:       1440ffef        bnez    v0,10b4 <main+0x1c>
-}   
+   10f4:       1440ffef        bnez    v0,10b4 <main+0x1c>  
    10f8:       00000000        nop
    10fc:       afc00018        sw      zero,24(s8)
-i < SIZE
    1100:       10000028        b       11a4 <main+0x10c>
    1104:       00000000        nop
-for(i = 0; i < SIZE; i++){
    1108:       27c30024        addiu   v1,s8,36
    110c:       8fc20018        lw      v0,24(s8)
    1110:       00021080        sll     v0,v0,0x2
@@ -176,7 +165,6 @@ for(i = 0; i < SIZE; i++){
    11a4:       8fc20018        lw      v0,24(s8)
    11a8:       28420008        slti    v0,v0,8
    11ac:       1440ffd6        bnez    v0,1108 <main+0x70>
-}
    11b0:       00000000        nop
    11b4:       0000000d        break
    11b8:       8fc20024        lw      v0,36(s8)
