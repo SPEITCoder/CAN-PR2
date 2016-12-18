@@ -75,5 +75,6 @@ C Code <main>: the condition before for-loop. It is usually untaken.
 ```11e8:       0c000426        jal     1098 <main>```  
 C Code <__start>: ```main()```, Always taken.
 
-The 1 bit predictor do its prediction based on the recent result of the branch. We firstly assume that each branck has its own bit, i.e for every branch instruction address, a mod k are not equal to other.
+The 1 bit predictor do its prediction based on the recent result of the branch. We firstly assume that each branck has its own bit, i.e for every branch instruction address, a mod k are not equal to other.  
+The instruction 1078 correspond to the condition of exiting the for-loop in minIndex function. function minIndex be called 8 time in the programme. The 1 bit predictor will have a misprediction in the first loop and the last loop, thus we have 16 mispresictions. Meanwhile, the 2 bit predictor, at the beginning, has the 2-bit 00. In the first two loops, the predictor will not take the branch, because the bit patterns are 00 and 01. After that, the predictor will take the branch because of its bit partterns: 11 or 10 and we can see that the bit pattern will be always 11 and 10. So 2 bit predictor will only has a misprediction when exiting the loop, add the first two mispredictions, it has totally 9 mispredictions.
 
