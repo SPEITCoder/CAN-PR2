@@ -51,7 +51,7 @@ When we look at the situation of each branch,we find that the difference bewteen
 C Code <minIndex>: ```for(i = 0; i < n; i++)```, the condition after for-loop. It is usually taken.
 
 ```1050:       10400003        beqz    v0,1060 <minIndex+0x60>```  
-C Code <minIndex>: ```if (array[i] < array[minIdx])```, usually untaken.
+C Code <minIndex>: ```if (array[i] < array[minIdx])```, usually taken.
 
 ```10f4:       1440ffef        bnez    v0,10b4 <main+0x1c>```  
 C Code <main>: ```for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
@@ -60,7 +60,7 @@ C Code <main>: ```for(i = 0; i < SIZE; i++)```, the condition after for-loop. It
 C Code <main>: ```for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
 
 ```101c:       10000013        b       106c <minIndex+0x6c>```  
-C code <minIndex>: ```for(i = 0; i < n; i++)```, the condition before for-loop. It is usually untaken.
+C code <minIndex>: ```for(i = 0; i < n; i++)```, the condition before for-loop. It is always taken and PC jumps to the condition after for-loop.
 
 ```1090:       03e00008        jr      ra```  
 C Code <minIndex>: ```return minIndx```, Alway taken.
@@ -70,7 +70,7 @@ C Code <main>: ```minIndex(&buf[i], SIZE - i)```, Always taken.
 
 ```10ac:       1000000f        b       10ec <main+0x54>```  
 ```1100:       10000028        b       11a4 <main+0x10c>```  
-C Code <main>: the condition before for-loop. It is usually untaken.
+C Code <main>: the condition before for-loop. It is usually taken.
    
 ```11e8:       0c000426        jal     1098 <main>```  
 C Code <__start>: ```main()```, Always taken.
@@ -78,3 +78,12 @@ C Code <__start>: ```main()```, Always taken.
 The 1 bit predictor do its prediction based on the recent result of the branch. We firstly assume that each branck has its own bit, i.e for every branch instruction address, a mod k are not equal to other.  
 The instruction 1078 correspond to the condition of exiting the for-loop in minIndex function. function minIndex be called 8 time in the programme. The 1 bit predictor will have a misprediction in the first loop and the last loop, thus we have 16 mispresictions. Meanwhile, the 2 bit predictor, at the beginning, has the 2-bit 00. In the first two loops, the predictor will not take the branch, because the bit patterns are 00 and 01. After that, the predictor will take the branch because of its bit partterns: 11 or 10 and we can see that the bit pattern will be always 11 and 10. So 2 bit predictor will only has a misprediction when exiting the loop, add the first two mispredictions, it has totally 9 mispredictions.
 
++ Penalties  
+ 
+We find that there is always a nop instruction after condition instruction and the penalties are:   
+PC/Prediction taken/untaken: 3  
+PC/Prediction taken/taken: 2  
+PC/Prediction untaken/taken: 3  
+PC/Prediction untaken/untaken: 2  
+
+Because there is a nop after condition, CPU only need to flush when a misprediction occur. In addition, CPU has the same behavier after a taken/untaken or a untaken/taken, which could simplfy the design.
