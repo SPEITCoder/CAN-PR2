@@ -1,5 +1,5 @@
 # 4. Branch Prediction
-+ Comperation of two predictor
++ Comparison of two predictors
 
 We compare the performance of 1 bit predictor and 2 bit predictor:
 
@@ -13,7 +13,7 @@ log file of 2 bit predictor
 INFO  [openDLX]: Jumps correctly predicted: 99 mispredicted: 26 misprediction rate: 20,8%
 ```
 
-We can see that the number of prediction are both 125 and 1 bit prediction has higher misprediction rate.
+We can see that the number of predictions are both 125 and the 1 bit prediction approach has a higher misprediction rate.
 
 + Detail
 
@@ -43,7 +43,7 @@ INFO  [openDLX]: bpc: 0x000010ac [44] tgts: [0x000010ec] a:1 t/nt: 1/0 mp/cp: 1/
 INFO  [openDLX]: bpc: 0x00001100 [0] tgts: [0x000011a4] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 INFO  [openDLX]: bpc: 0x000011e8 [104] tgts: [0x00001098] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 ```
-When we look at the situation of each branch,we find that the difference bewteen two predictor is more signficant when the branch is executed lots of times. For example, the branch ```0x00001024```. However, 2 bit predictor is not alway better than 1 bit predictor. On branchs ```0x000010b4``` to ```0x00001098```, perdormences of two predictor are the same.
+When we look at the situation of each branch, we find that the difference bewteen two predictors is more signficant when the branch is executed lots of times. For example, the branch ```0x00001024```. However, 2 bit predictor is not alway better than 1 bit predictor. On branchs ```0x000010b4``` to ```0x00001098```, performences of two predictors are the same.
 
 + Explanation of the difference
 
@@ -75,8 +75,18 @@ C Code <main>: the condition before for-loop. It is usually taken.
 ```11e8:       0c000426        jal     1098 <main>```  
 C Code <__start>: ```main()```, Always taken.
 
-The 1 bit predictor do its prediction based on the recent result of the branch. We firstly assume that each branck has its own bit, i.e for every branch instruction address, a mod k are not equal to other.  
-The instruction 1078 correspond to the condition of exiting the for-loop in minIndex function. function minIndex be called 8 time in the programme. The 1 bit predictor will have a misprediction in the first loop and the last loop, thus we have 16 mispresictions. Meanwhile, the 2 bit predictor, at the beginning, has the 2-bit 00. In the first two loops, the predictor will not take the branch, because the bit patterns are 00 and 01. After that, the predictor will take the branch because of its bit partterns: 11 or 10 and we can see that the bit pattern will be always 11 and 10. So 2 bit predictor will only has a misprediction when exiting the loop, add the first two mispredictions, it has totally 9 mispredictions.
+The 1 bit predictor do its prediction based on the recent result of the branch. 
+We firstly assume that each branch has its own bit, i.e for every branch instruction address, 
+a mod k are not equal to other (no collision in hash table).  
+The instruction 1078 correspond to the condition of exiting the for-loop in minIndex function. 
+Function minIndex is called 8 times in the programme. 
+The 1 bit predictor will have a misprediction in the first loop and the last loop, thus we have 16 mispresictions. 
+Meanwhile, the 2 bit predictor, at the beginning, has the 2-bit 00. 
+In the first two loops, the predictor will not take the branch, because the bit patterns are 00 and 01. 
+After that, the predictor will take the branch because of its bit partterns: 11 or 10 
+and we can see that the bit pattern will be always 11 and 10. 
+So 2 bit predictor will only has one misprediction when exiting the loop, 
+added with the first two mispredictions, it has in total 9 mispredictions.
 
 + Penalties  
  
