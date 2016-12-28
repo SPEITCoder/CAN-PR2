@@ -80,7 +80,8 @@ The instruction 1078 correspond to the condition of exiting the for-loop in minI
 
 + Penalties  
  
-We find that there is always a nop instruction after condition instruction and the penalties are:   
+We find that there is always a nop instruction after a conditional jump instruction,
+which is, in our opinion, systematically added by the compiler, and the penalties (including the nop added) are:   
 PC/Prediction taken/untaken: 3  
 PC/Prediction taken/taken: 2  
 PC/Prediction untaken/taken: 3  
