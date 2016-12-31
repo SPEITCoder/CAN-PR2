@@ -289,6 +289,9 @@ The program actually access the data:
 
    in total 8+1+2+2 = 13.
 
+Pratically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data.
+In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed.
+
 ## Final question
 
 The configuration dcache_block_size = 16/32, 4-way set-associative, total number of cache blocks = 8 performs the best (the hit rate 99.6% exceeds all the others cases).
