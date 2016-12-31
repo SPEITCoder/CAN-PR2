@@ -89,32 +89,32 @@ When we look at the situation of each branch, we find that the difference bewtee
 ## Explanation of the difference
 
 ```1078:       1440ffea        bnez    v0,1024 <minIndex+0x24>```  
-C Code <minIndex>: ```for(i = 0; i < n; i++)```, the condition after for-loop. It is usually taken.
+C Code ```<minIndex>: for(i = 0; i < n; i++)```, the condition after for-loop. It is usually taken.
 
 ```1050:       10400003        beqz    v0,1060 <minIndex+0x60>```  
-C Code <minIndex>: ```if (array[i] < array[minIdx])```, usually taken.
+C Code ```<minIndex>: if (array[i] < array[minIdx])```, usually taken.
 
 ```10f4:       1440ffef        bnez    v0,10b4 <main+0x1c>```  
-C Code <main>: ```for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
+C Code ```<main>: for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
 
 ```11ac:       1440ffd6        bnez    v0,1108 <main+0x70>```  
-C Code <main>: ```for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
+C Code ```<main>: for(i = 0; i < SIZE; i++)```, the condition after for-loop. It is usually taken.
 
 ```101c:       10000013        b       106c <minIndex+0x6c>```  
-C code <minIndex>: ```for(i = 0; i < n; i++)```, the condition before for-loop. It is always taken and PC jumps to the condition after for-loop.
+C code ```<minIndex>: for(i = 0; i < n; i++)```, the condition before for-loop. It is always taken and PC jumps to the condition after for-loop.
 
 ```1090:       03e00008        jr      ra```  
-C Code <minIndex>: ```return minIndx```, Alway taken.
+C Code ```<minIndex>: return minIndx```, Alway taken.
 
 ```1128:       0c000400        jal     1000 <minIndex>```  
-C Code <main>: ```minIndex(&buf[i], SIZE - i)```, Always taken.
+C Code ```<main>: minIndex(&buf[i], SIZE - i)```, Always taken.
 
 ```10ac:       1000000f        b       10ec <main+0x54>```  
 ```1100:       10000028        b       11a4 <main+0x10c>```  
-C Code <main>: the condition before for-loop. It is usually taken.
+C Code ```<main>```: the condition before for-loop. It is usually taken.
    
 ```11e8:       0c000426        jal     1098 <main>```  
-C Code <__start>: ```main()```, Always taken.
+C Code ```<__start>: main()```, Always taken.
 
 The 1 bit predictor do its prediction based on the recent result of the branch. 
 We firstly assume that each branch has its own bit, i.e for every branch instruction address, 
@@ -289,7 +289,7 @@ The program actually access the data:
 
    in total 8+1+2+2 = 13.
 
-Pratically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data.
+Practically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data.
 In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed.
 
 ## Final question
