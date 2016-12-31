@@ -5,10 +5,12 @@
 We give a delay time between the memory's receipt of a read request and its release of data corresponding with the request. So the IF, MEM and WB will have delay in the pipelining.
 Other stages will also have delays for the data dependency.
 ![image](img/51.png)
+
 ```
 Dcache: 
 Accesses: 500  hits: 220  misses: 280  hit rate: 44%  total size: 16
 ```
+
 + dcache_total_block_number
 
 dcache_total_block_number = 4
