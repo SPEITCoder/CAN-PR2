@@ -289,8 +289,9 @@ The program actually access the data:
 
    in total 8+1+2+2 = 13.
 
-Practically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data.
-In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed.
+Practically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data. And we can observe that when the cache provide enough space to store 16 > 13 integers (cache size = 128), we can see that the hit rate is nearly 100%.
+
+In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed, namely compulsory miss. On the contrary, if the cache size is not adequate, the data miss consist mainly of the capacity miss.
 
 ## Final question
 
