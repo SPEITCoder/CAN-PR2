@@ -11,17 +11,17 @@ e.g. Cycle 3, instruction 0x11d8: sw 28(r29), r31 is in EX stage, where r29 isn'
 
 ![Logs](img/3forwarding1.png)
 
-In addtion, it is explicitly shown from the log that a forwarding is done to fetch the computed r29 value for sw instruction.
+In addition, it is explicitly shown from the log that a forwarding is done to fetch the computed r29 value for sw instruction.
 ## Special case for <code>lw</code>
 
 When 0x11ec <code>lw</code> is in EX and MEM stages, <code>slti</code> needs r2 value to enter EX stage, thus this dependency caused a data hazard, solved by a stalling of penalty 1.
 ![Stall](img/3stall.png)
 
-## Stages striked out
+## Stages stroked out
 
 ![Flush](img/3flush.png)
 
-0x11f0 is actually a misprediction produced at 0x11e8, (it is not actually a prediction since the instuction 0x11e8 is an unconditonal jump).
+0x11f0 is actually a misprediction produced at 0x11e8, (it is not actually a prediction since the instruction 0x11e8 is an unconditional jump).
 Thus when 0x11e8 enters EX stage and the CPU spots out that 0x11f0 should not be executed at all, thus it is flushed and the correct instruction is fetched from 0x1098.
 
 Another example could be find here: 
@@ -71,7 +71,7 @@ INFO  [openDLX]: bpc: 0x000010ac [44] tgts: [0x000010ec] a:1 t/nt: 1/0 mp/cp: 1/
 INFO  [openDLX]: bpc: 0x00001100 [0] tgts: [0x000011a4] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 INFO  [openDLX]: bpc: 0x000011e8 [104] tgts: [0x00001098] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 ```
-2 bit prodictor
+2 bit predictor
 ```
 INFO  [openDLX]: bpc: 0x00001078 [120] tgts: [0x00001024] a:44 t/nt: 36/8 mp/cp: 9/35 mp-ratio: 0,2
 INFO  [openDLX]: bpc: 0x00001050 [80] tgts: [0x00001060] a:36 t/nt: 31/5 mp/cp: 7/29 mp-ratio: 0,19
@@ -84,7 +84,7 @@ INFO  [openDLX]: bpc: 0x000010ac [44] tgts: [0x000010ec] a:1 t/nt: 1/0 mp/cp: 1/
 INFO  [openDLX]: bpc: 0x00001100 [0] tgts: [0x000011a4] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 INFO  [openDLX]: bpc: 0x000011e8 [104] tgts: [0x00001098] a:1 t/nt: 1/0 mp/cp: 1/0 mp-ratio: 1
 ```
-When we look at the situation of each branch, we find that the difference bewteen two predictors is more signficant when the branch is executed lots of times. For example, the branch ```0x00001024```. However, 2 bit predictor is not alway better than 1 bit predictor. On branchs ```0x000010b4``` to ```0x00001098```, performences of two predictors are the same.
+When we look at the situation of each branch, we find that the difference between two predictors is more significant when the branch is executed lots of times. For example, the branch ```0x00001024```. However, 2 bit predictor is not always better than 1 bit predictor. On branchs ```0x000010b4``` to ```0x00001098```, performances of two predictors are the same.
 
 ## Explanation of the difference
 
@@ -117,14 +117,14 @@ C Code ```<main>```: the condition before for-loop. It is usually taken.
 C Code ```<__start>: main()```, Always taken.
 
 The 1 bit predictor do its prediction based on the recent result of the branch. 
-We firstly assume that each branch has its own bit, i.e for every branch instruction address, 
+We firstly assume that each branch has its own bit, i.e. for every branch instruction address, 
 a mod k are not equal to other (no collision in hash table).  
 The instruction 1078 correspond to the condition of exiting the for-loop in minIndex function. 
-Function minIndex is called 8 times in the programme. 
+Function minIndex is called 8 times in the program. 
 The 1 bit predictor will have a misprediction in the first loop and the last loop, thus we have 16 mispresictions. 
 Meanwhile, the 2 bit predictor, at the beginning, has the 2-bit 00. 
 In the first two loops, the predictor will not take the branch, because the bit patterns are 00 and 01. 
-After that, the predictor will take the branch because of its bit partterns: 11 or 10 
+After that, the predictor will take the branch because of its bit patterns: 11 or 10 
 and we can see that the bit pattern will be always 11 and 10. 
 So 2 bit predictor will only has one misprediction when exiting the loop, 
 added with the first two mispredictions, it has in total 9 mispredictions.
@@ -132,13 +132,13 @@ added with the first two mispredictions, it has in total 9 mispredictions.
 ## Penalties  
  
 We find that there is always a nop instruction after a conditional jump instruction,
-which is, in our opinion, systematically added by the compiler, and the penalties (including the nop added) are:   
-PC/Prediction taken/untaken: 3  
-PC/Prediction taken/taken: 2  
-PC/Prediction untaken/taken: 3  
-PC/Prediction untaken/untaken: 2  
+which is, in our opinion, systematically added by the compiler, we count it also in penalty and the penalties (including the nop added) are:   
+PC/Prediction taken/untaken: 3; Penalty: 2  
+PC/Prediction taken/taken: 2; Penalty: 1  
+PC/Prediction untaken/taken: 3; Penalty: 2  
+PC/Prediction untaken/untaken: 2; Penalty: 1   
 
-Because there is a nop after condition, CPU only need to flush when a misprediction occur. In addition, CPU has the same behavier after a taken/untaken or a untaken/taken, which could simplfy the design.
+Because there is a nop after condition, CPU only need to flush when a misprediction occur. In addition, CPU has the same behavior after a taken/untaken or a untaken/taken, which could simplify the design.
 
 # 5 Data Caches
 
@@ -289,15 +289,15 @@ The program actually access the data:
 
    in total 8+1+2+2 = 13.
 
-Practically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data. And we can observe that when the cache provide enough space to store 16 > 13 integers (cache size = 128), we can see that the hit rate is nearly 100%.
+Practically, a cache that is large enough to contain 8 integers (32 cache size units) would provide a promising hit rate as they are the most frequently used data. And we can observe that when the cache provides enough space to store 16 > 13 integers (cache size = 128), we can see that the hit rate is nearly 100%.
 
-In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed, namely compulsory miss. On the contrary, if the cache size is not adequate, the data miss consist mainly of the capacity miss.
+In addition, if a data cache is large enough to cache all the data accessed, data miss would only be generated the first time it is accessed, namely compulsory miss. On the contrary, if the cache size is not adequate, the data miss consists mainly of the capacity miss.
 
 ## Final question
 
 The configuration dcache_block_size = 16/32, 4-way set-associative, total number of cache blocks = 8 performs the best (the hit rate 99.6% exceeds all the others cases).
 
-The configuration:  dcache_block_size = 8, 4-way set-associative, total number of cache blocks = 8 made the best trade-off between the total cache size and the hit rate. Because the hit rate is rather good and close to 100% (96.8%), but the total cache size is merely half of the best performance case(the case total size = 128, hit rate = 99.6%) in block size section. 
+The configuration:  dcache_block_size = 8, 4-way set-associative, total number of cache blocks = 8 made the best trade-off between the total cache size and the hit rate. Because the hit rate is rather good and close to 100% (96.8%), but the total cache size is merely half of the best performance case (the case total size = 128, hit rate = 99.6%) in block size section. 
 
 From the result of changing data cache number and size, we can observe that as the total size increase, the hit rate is significantly enhanced, and from question 4 that as the total cache size is fixed, the enhance of hit rate is limited. So we can conclude that the total cache size is the most relevant parameter to the hit rate. And this conclusion is coherent with the analysis of data access that the data is reused very frequently and the most dominant factor of the hit rate is the cache size.
 
